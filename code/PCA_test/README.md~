@@ -1,0 +1,89 @@
+#A implement of Principal Components Analysis
+##预处理
+在进行主成分分析之前，我们需要先做以下处理：
+路径补全、数据抽取和整合、数据清理和补全，然后再进行主成分分析
+###路径补全
+由于数据基数比较大，直接读取硬盘数据速度太慢，所以建立一个索引表，将有效文件路径统一写进**/lkp/paths**文件夹下
+
+
+由于没有现成的linux kernel数据（随机的数据不能体现出主成分的意义），我选择了一个成绩表作为我们的研究对象。
+成绩表的格式如下所示：
+|English|Math|Chinese|Physics|Chemistry|Biology|Total|School Rank|Total Rank|
+| --- |:----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+|135.6|	146|	116|	102|	88|	84|	671.6|	1	|1|
+|133.1|	148|	121|	100|	91|	76|	669.1|	1	|2|
+Total 是总分，School是校名次， Total Rank是总排名
+分析的步骤如下
+##1. 数据归一化
+因为数字的大小相差较大，所以直接进行分析对小数值的数据不利，首先对每一组数字进行归一化处理。归一化方法很多，这里使用**最值归一化**方法。
+##2. 主成分个数判断
+PCA中有很多种判断主成分个数的方法，我们采用最常用的特征值法：**每个主成分都与相关系数矩阵的特征值关联，第一主成分与最大的特征值相关联，第二主成分与第二大的特征值相关联，依此类推。**而利用Cattell碎石检验能绘制特征值与主成分数的图形，如下图所示：
+![判断特征值个数][1]
+  [1]: ./img/number.png
+上图中，直线与x符号链接的曲线为**碎石图**，1.0水平线(未标出)为**1准则**的特征值，虚线为100次随机数据模拟的**平行分析**。碎石图画出了特征值与主成分分数的图形。结果表明，选择2个主成分即可保留样本中的大量分信息(1准则)。
+##3. 主成分提取
+按照上面的预测我们提取2个主成分，将主成分分析输出结果如下：
+
+    Principal Components Analysis
+    Call: principal(r = norm_data, nfactors = 2, scores = TRUE)
+    Standardized loadings (pattern matrix) based upon correlation matrix
+                  PC1   PC2   h2    u2 com
+    English      0.15  0.42 0.20 0.798 1.2
+    Math         0.70  0.08 0.50 0.502 1.0
+    Chinese     -0.29  0.79 0.71 0.290 1.3
+    Physics      0.66 -0.04 0.44 0.564 1.0
+    Chemistry    0.56 -0.05 0.31 0.688 1.0
+    Biology     -0.01  0.37 0.14 0.862 1.0
+    Total        0.80  0.57 0.97 0.030 1.8
+    School      -0.40 -0.66 0.60 0.402 1.6
+    Total.Total -0.79 -0.57 0.95 0.053 1.8
+
+                           PC1  PC2
+    SS loadings           2.76 2.05
+    Proportion Var        0.31 0.23
+    Cumulative Var        0.31 0.53
+    Proportion Explained  0.57 0.43
+    Cumulative Proportion 0.57 1.00
+    
+    Mean item complexity =  1.3
+    Test of the hypothesis that 2 components are sufficient.
+    
+    The root mean square of the residuals (RMSR) is  0.12 
+     with the empirical chi square  116.93  with prob <  4.1e-16 
+    
+    Fit based upon off diagonal values = 0.87
+从上述的结果中可以看出，RC1、RC2栏包含了旋转的成分载荷(component loadings)，成分载荷是观观测变量与主成分的相关系数。成分载荷可用于解释主成分的含义。
+
+比如在本例中，第一主成分(RC1)与Math、Physics、Chemstry、Total比较
+相关(相关值均大于0.5)，第二主成分(RC2)与Chinese、English较为相关。
+依照第一主成分我们可以做出推测，这次考试Math、Physics比较难，区分度较大。
+
+h2栏是成分公因子方差，是主成分对每个变量的方差解释度。
+U2栏是成分唯一性，是主成分无法解释变量方差的比例，其值=1-h2。
+
+比如本例中，第一主成分对Total变量（总分）方差的解释为97%，3%不能解释。
+
+SS loadings包含了与主成分相关联的特征值，其含义是与特定主成分相关联的标准化后的方差值。比如，本例中，第一主成分的值为2.76。
+接下来的proportion  var和cumulative var分别为主成分对整个数据集的方差解释度和累积解释度。
+本例中，第一主成分解释了9个变量31%的方差，第二主成分解释了23%的方差，累计方差的解释度为54%。
+
+##4. 获取主成分的得分
+获取主成分得分如下：
+
+                  PC1   PC2
+    English      0.15  0.42
+    Math         0.70  0.08
+    Chinese     -0.29  0.79
+    Physics      0.66 -0.04
+    Chemistry    0.56 -0.05
+    Biology     -0.01  0.37
+    Total        0.80  0.57
+    School      -0.40 -0.66
+    Total Rank -0.79 -0.57
+根据上述的结果，即可写出第一和第二主成分的方程：
+
+    Y1 = 0.15 English + 0.70 Math - 0.29 Chinese + 0.66 Physics + 0.56 Chemistry - 0.01 Biology + 0.80 Total - 0.40 School - 0.79 Total Rank
+    Y1 = 0.42 English + 0.08 Math - 0.79 Chinese + 0.04 Physics + 0.05 Chemistry - 0.37 Biology + 0.57 Total - 0.66 School - 0.57 Total Rank
+
+从上述的两个方程中可知，第一主成分中两个排名的数据都是负相关，这与常理得分越高排名数越小符合，同时由于每个学校之间的水平不等，校排名的相关度（绝对值）要小于整体排名。另外在第一主成分中为负相关的Chinese和Biology科目在第二主成分中都是正相关（二者正交得到验证），说明这两门科目与另外四门相关性不大，这与Chinese、Biology两门科目偏文科、其他四门偏理科的常识符合，另外由于节选的成绩是理科成绩，所以第一主成分（代表理科）对总成绩的影响更大，也是符合常理的。
+

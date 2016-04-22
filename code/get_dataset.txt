@@ -1,0 +1,24 @@
+1, ####### steps to get dataset from linux kernel commits ##############
+user@user-ThinkPad-X1-Carbon:~/linuxhistory$git clone 
+git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+
+user@user-ThinkPad-X1-Carbon:~/linuxhistory/linux$ git log --numstat 
+--pretty=format:"STARTOFTHECOMMIT%n%H;%an;%ae;%ad;%cn;%ce;%cd;%s" > 
+log.linux
+
+user@user-ThinkPad-X1-Carbon:~/linuxhistory$ mv linux/log.linux .
+
+perl extrgit.perl <log.linux >linux.l1    #see attached extrgit.perl
+
+cat linux.l1 |
+while read
+   do perl -ane 'use Time::ParseDate qw(parsedate); 
+($rev,$aname,$cname,$alogin,$clogin,$nadd,$atime,$ctime,$f,$cmt)=split(/\;/,$_, 
+-1); $at=parsedate("$atime");$ct=parsedate("$ctime"); print 
+"$rev\;$aname\;$cname\;$alogin\;$clogin\;$nadd\;$at\;$ct\;$f\;$cmt"';
+done > linux.l2
+##############################################
+
+2, process.r是一些R语言的样句.
+
+3, 两个pdf文件是两篇论文, 了解一下问题是怎么做的先.

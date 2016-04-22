@@ -1,0 +1,4 @@
+gcc-4.9
+x86_64-rhel+CONFIG_DEBUG_INFO
+x86_64-rhel
+x86_64-nd
