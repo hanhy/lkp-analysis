@@ -130,7 +130,8 @@ Zhen Jia1,, Jianfeng Zhan , Lei Wang，etc, [*Characterizing and Subsetting Big 
 - 不同linux kernel版本之间的pattern变化模式（跳变、线性等）
 	阅读论文列表[列表](paper-index.md)中的15、18、19、21
 	更新毕业论文中背景、目的、内容的部分，并开始写主要研究工作部分
-
+##4-24
+	使用parallel python对之前的程序进行了加速，提取的过程从20+小时降到一个小时之内
 
 
 
