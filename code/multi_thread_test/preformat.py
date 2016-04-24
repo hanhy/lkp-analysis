@@ -6,26 +6,19 @@
 import os
 import sys
 
-aim7 = []
-ebizzy = []
+bl = {}#benchmark to a list
+for i in open("benchmarks.txt"):
+	bl[i[0:len(i) - 1]] = []
 
 for i in open("newpathsbackup.txt"):
 	print i
-	if not cmp(i.split("/")[1], "aim7"):
-		aim7.append("i")
-	if not cmp(i.split("/")[1], "ebizzy"):
-		ebizzy.append("i")
+	bl[i.split("/")[1]].append(i)
 
-aim7out = open("aim7_path.txt", "w")
-s = ""
-for path in aim7:
-	s += path
-aim7out.write(s)
-aim7out.close()
-
-ebizzyout = open("ebizzy_path.txt", "w")
-s = ""
-for path in ebizzy:
-	s += path
-ebizzyout.write(s)
-ebizzyout.close()
+for k, v in bl.items():
+	print k
+	out = open("path/" + k + ".txt", "w")
+	s = ""
+	for path in v:
+		s += path
+	out.write(s)
+	out.close()
