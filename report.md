@@ -138,7 +138,32 @@ Zhen Jia1,, Jianfeng Zhan , Lei Wang，etc, [*Characterizing and Subsetting Big 
 	之前我们说对每一个benchmark，有多组test parameter，每一组test parameter对应一次测试，我们的一个目标是通过发现测试之间结果的相关性，发现冗余的测试。但对于每次测试，也会有多组性能指标，这使得比较测试结果间的相关性变得更复杂。所以我建议这里可以分两阶段进行。阶段1比较同一次测试，不同性能指标间的相关性。这个对于我们分析，理解性能指标也很有价值，本身可以作为我们工作的成果之一。阶段2比较不同测试间的性能指标，可以以KPI (Key Performance Index关键性能指标)为主，也就是看不同测试间KPI的相关性。
 	这个工作感觉不需要降维，因为维度体现在test parameter里。
 今天准备以aim7为例，进行单个测试内部的指标相关性分析
+##5-18
+选定皮尔森相关系数作为指标相关性分析的衡量标准，以ebizzy为例，分别分析每个指标和ebizzy.throughput的相关性，给出解释
+尚需确定空缺数据的处理方法
+##5-20
+先不管空缺数据，看看能有多少缺少的，如果不影响比较（两个向量有交集）的话就没关系。
 
+在分析我先找到了ebizzy的KPI：ebizzy.throughput和17个准
+KPI:
+ebizzy.throughput.per_thread.min
+ebizzy.time.minor_page_faults
+ebizzy.time.user_time
+ebizzy.time.page_size
+ebizzy.throughput.per_thread.stddev_percent
+ebizzy.time.system_time
+ebizzy.time.user
+ebizzy.time.elapsed_time.max
+ebizzy.time.sys
+ebizzy.time.file_system_outputs
+ebizzy.time.involuntary_context_switches
+ebizzy.time.maximum_resident_set_size
+ebizzy.time.elapsed_time
+ebizzy.time.voluntary_context_switches
+ebizzy.time.real
+ebizzy.time.percent_of_cpu_this_job_got
+ebizzy.throughput.per_thread.max
+我的思路是首先分析这17个准KPI和KPI相关性的大小，按照他们被设定成准KPI的事实来看，相关性应该很大，可以作为是否相关的一个标准值
 
 
 
