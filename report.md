@@ -164,6 +164,8 @@ ebizzy.time.real
 ebizzy.time.percent_of_cpu_this_job_got
 ebizzy.throughput.per_thread.max
 我的思路是首先分析这17个准KPI和KPI相关性的大小，按照他们被设定成准KPI的事实来看，相关性应该很大，可以作为是否相关的一个标准值
+##5-23
+几个准ebizzy中的kpi含有数字5238个，其17个准KPI的值中都是有约3900个的空值，尚且有1000个以上的可比较值，因此可以实现比较。
 
 
 

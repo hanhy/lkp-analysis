@@ -32,12 +32,22 @@ def get_kpi_data(benchmark, csv_file):
 		for k, v in kpi_data.items():
 			kpi_data[k].append(line[kpi_index[k]])
 	csvfile.close()
-	return kpi_data
+	return kpi_data, pan_kpi
 
 #def cal_corr(kpi_data):
-	
+def empty_num(kpi_data, pan_kpi):
+	for kpi in pan_kpi:
+		print kpi
+		kpi_list = kpi_data[KPI]
+		pan_kpi_list = kpi_data[kpi]
+		length = len(kpi_list)
+		num = 0
+		for i in range(length):
+			if len(kpi_list[i]) == 0 or len(pan_kpi_list[i]) == 0:
+				num += 1
+		print num
 
 if __name__ == "__main__":
-	kpi_data = get_kpi_data("ebizzy", "ebizzy.csv")
-	print "\n\n\n\n\n\n\n"
-	print kpi_data
+	kpi_data, pan_kpi = get_kpi_data("ebizzy", "ebizzy.csv")
+	print len(kpi_data["ebizzy.throughput"])
+	empty_num(kpi_data, pan_kpi)
