@@ -167,6 +167,33 @@ ebizzy.throughput.per_thread.max
 ##5-23
 几个准ebizzy中的kpi含有数字5238个，其17个准KPI的值中都是有约3900个的空值，尚且有1000个以上的可比较值，因此可以实现比较。
 
+我计算的18个准KPI（其中包括KPI本身）与KPI的相关系数表格如下所示：
+ebizzy.time.involuntary_context_switches
+ebizzy.time.maximum_resident_set_size
+ebizzy.throughput
+ebizzy.time.elapsed_time
+ebizzy.time.voluntary_context_switches
+ebizzy.time.real
+ebizzy.time.percent_of_cpu_this_job_got
+ebizzy.throughput.per_thread.max
+ebizzy.throughput.per_thread.min
+ebizzy.time.minor_page_faults
+ebizzy.time.user_time
+ebizzy.time.page_size
+ebizzy.throughput.per_thread.stddev_percent
+ebizzy.time.system_time
+ebizzy.time.user
+ebizzy.time.elapsed_time.max
+ebizzy.time.sys
+ebizzy.time.file_system_outputs
+[0.65636159150479501, 0.61894249478962238, 1.0007541478129702, -0.091181707089333111, 0.57911967189022107, 0.12726592357809047, 0.60550377165085978, 0.042290611160961951, -0.082054380510512046, 0.99200646319340435, 0.74195632268186562, 0.14034997994668358, -0.43902747989437596, 0.59495980389181624, 0.74694998790454392, -0.091181707089333111, 0.58691781161965473, 0.084365981758326866]
+从数据中可以看出相当大的一部分准KPI与KPI的相关性都很大，很多都超过了0.5
+接着我们计算所有的指标与KPI的相关性，形成的结果将使用一个csv表格来呈现
+#5-24
+从前面的结果看有一些指标与KPI的相关系数绝对值超过了1，且其一大部分都是正负2.0，这明显是错误的结果，现在我们要找出为什么会出现这种错误，
+以其中相关系数为2.0的指标diskstats.sde2.time_in_queue为例，看看它与KPI之间的数据差别。
+
+
 
 
 
